@@ -1,0 +1,44 @@
+<%- include('partials/head') %>
+
+<div class="danger">
+	<h3>Palovaara!</h3>
+	<p>Olet ohjaamassa palovaarallista laitetta. Oletko varma, että haluat ohjata laitteen päälle?</p>
+	<div class="confirm">
+		<button id="confirmDangerous">Kyllä</button>
+		<button id="cancelDangerous">Ei</button>
+	</div>
+</div>
+
+<div class="overlay"></div>
+
+<main>
+	<div class="grid commands">
+
+		<% commands.forEach(cmd => { %>
+		<div class="command box" data-address="<%= cmd.address %>" data-danger="<%= cmd.dangerous %>">
+			<div class="icon">
+				<%- cmd.icon %>
+			</div>
+			<div class="address">
+				<p><%= cmd.location %></p>
+			</div>
+		</div>
+		<% }) %>
+		<% if (commands.length > 0) { %>
+		<div class="command box" data-address="12">
+			<div class="icon">
+				<i class='bx bx-power-off'></i>
+			</div>
+			<div class="address">
+				<p>Kaikki pois</p>
+			</div>
+		</div>
+		<% } %>
+	</div>
+</main>
+
+<script src="/static/js/main.js"></script>
+<script src="/static/js/socket.io.min.js"></script>
+<script src="/static/js/socket.js"></script>
+
+<%- include('partials/footer') %>

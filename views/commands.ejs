@@ -1,0 +1,156 @@
+<%- include('partials/head') %>
+
+<main>
+	<section>
+		<form action="/newCommand" method="POST">
+			<div class="form-field">
+				<label for="address">Osoite:</label>
+				<select name="address" id="address">
+					<option value="0">0</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+				</select>
+				<small id="addError"></small>
+			</div>
+			<div class="form-field">
+				<label for="icon">Kuvake:</label>
+				<div class="grid grid-3 gap1">
+					<div class="command box icon-selection" data-icon="<i class='bx bx-bulb'></i>">
+						<i class='bx bx-bulb'></i>
+					</div>
+
+					<div class="command box icon-selection" data-icon="<i class='bx bx-tv'></i>">
+						<i class='bx bx-tv'></i>
+					</div>
+
+					<div class="command box icon-selection" data-icon="<i class='bx bxs-joystick'></i>">
+						<i class='bx bxs-joystick'></i>
+					</div>
+
+					<div class="command box icon-selection" data-icon="<i class='bx bx-coffee'></i>">
+						<i class='bx bx-coffee'></i>
+					</div>
+
+					<div class="command box icon-selection" data-icon="<i class='bx bx-car'></i>">
+						<i class='bx bx-car'></i>
+					</div>
+
+					<div class="command box icon-selection" data-icon="<i class='bx bxs-thermometer'></i>">
+						<i class='bx bxs-thermometer'></i>
+					</div>
+				</div>
+			</div>
+			<input type="hidden" name="icon" value="" required>
+			<div class="form-field">
+				<label for="location">Sijainti:</label>
+				<input type="text" name="location" required placeholder="Esim. Makuuhuone">
+			</div>
+			<div class="form-field">
+				<label for="dangerous">Ohjataanko palovaarallisia laitteita?</label>
+				<select name="dangerous" required>
+					<option value="true">Kyllä</option>
+					<option value="false">Ei</option>
+				</select>
+			</div>
+			<div class="form-button">
+				<button type="submit" id="save">Tallenna</button>
+			</div>
+		</form>
+	</section>
+
+	<section>
+		<h3>Ohjaukset</h3>
+		<ul class="commands">
+			<% commands.forEach(c => { %>
+			<li id="<%= c._id %>">
+				<p><%= c.address %></p>
+				<p><%= c.location %></p>
+				<button id="deleteCommand" class="del-command" value="<%= c._id %>">
+					<i class='bx bx-trash'></i>
+				</button>
+			</li>
+			<% }) %>
+		</ul>
+	</section>
+</main>
+
+<script src="/static/js/main.js"></script>
+<script src="/static/js/socket.io.min.js"></script>
+
+<script>
+	const socket = io();
+	const addressField = document.getElementById('address');
+	const addressError = document.getElementById('addError');
+
+	const iconList = document.querySelectorAll('.icon-selection');
+	const iconField = document.querySelector('[name="icon"]');
+
+	const saveButton = document.getElementById('save');
+
+	iconList.forEach(icon => {
+		icon.addEventListener('click', () => {
+			const iconName = icon.getAttribute('data-icon');
+			iconField.value = iconName;
+
+			iconList.forEach(icon => {
+				icon.style.border = "none";
+			});
+
+			icon.style.border = "2px solid #FFF";
+
+
+			console.log(iconField.value);
+		});
+	});
+
+	const used = [<%= used %>];
+
+	if (used.includes(parseInt(addressField.value))) {
+		addressField.style.border = "1px solid red";
+		addressError.textContent = 'Osoite on jo käytössä!';
+		save.disabled = true;
+	} else {
+		addressField.style.border = "none";
+		addressError.textContent = '';
+		save.disabled = false;
+	}
+
+	addressField.addEventListener('change', () => {
+
+		console.log(typeof used[3])
+
+		if (used.includes(parseInt(addressField.value))) {
+			addressField.style.border = "1px solid red";
+			addressError.textContent = 'Osoite on jo käytössä!';
+			save.disabled = true;
+		} else {
+			addressField.style.border = "none";
+			save.disabled = false;
+		}
+	});
+
+	const delButtons = document.querySelectorAll('.del-command');
+
+	delButtons.forEach(btn => {
+		btn.addEventListener('click', () => {
+			const id = btn.value;
+
+			socket.emit('delete command', id);
+		});
+	});
+
+	socket.on('delete command', (id) => {
+		const li = document.getElementById(id);
+		li.remove();
+	});
+</script>
+<%- include('partials/footer') %>
