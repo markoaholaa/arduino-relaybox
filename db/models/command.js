@@ -7,7 +7,9 @@ const commandSchema = new mongoose.Schema({
 	},
 	icon: String,
 	location: String,
-	dangerous: Boolean
+	dangerous: Boolean,
+	turnedOn: Number,
+	active: Boolean
 });
 
 module.exports = new mongoose.model('Command', commandSchema);

@@ -2,7 +2,8 @@
 
 <div class="danger">
 	<h3>Palovaara!</h3>
-	<p>Olet ohjaamassa palovaarallista laitetta. Oletko varma, että haluat ohjata laitteen päälle?</p>
+	<p>Olet ohjaamassa palovaarallista laitetta. Varmista, ettei mikään aiheuta palovaaraa laitteen ollessa päällä.
+		Ohjataanko laite päälle?</p>
 	<div class="confirm">
 		<button id="confirmDangerous">Kyllä</button>
 		<button id="cancelDangerous">Ei</button>
@@ -27,7 +28,7 @@
 		<% if (commands.length > 0) { %>
 		<div class="command box" data-address="12">
 			<div class="icon">
-				<i class='bx bx-power-off'></i>
+				<i class="fa-solid fa-power-off"></i>
 			</div>
 			<div class="address">
 				<p>Kaikki pois</p>
@@ -35,6 +36,12 @@
 		</div>
 		<% } %>
 	</div>
+
+	<section class="alerts">
+		<article class="no-connection">
+			<p id="arduinoDead"><i class="fa-solid fa-signal-bars-slash"></i> Yhteys arduinoon poikki.</p>
+		</article>
+	</section>
 </main>
 
 <script src="/static/js/main.js"></script>

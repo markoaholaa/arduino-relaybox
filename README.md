@@ -13,13 +13,14 @@ And 3 additional boards to add if needed:<br></br>
 ![addon board](https://i.imgur.com/ozBc17R.png)<br></br>
 
 Im in no way a professional PCB designer, but these should work.
+The trace width was calculated using PCB Design Software.
 
 ## 3D Printed Case
 
 The system obviously needs a case and rather than finding a case that already exists, I wanted to design my own.<br></br>
 
 ![3d printed case](https://i.imgur.com/7mK3FWr.png)<br></br>
-It has screw holes for the main board and 3 additional boards.
+It has screw holes for the main board and 3 additional boards. The middle part is thinner so you can cut it out in case you want to get the wires in from the back. And tbh, thats the only way in in this design.
 
 
 ## Project Updates

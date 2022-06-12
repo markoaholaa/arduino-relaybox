@@ -10,6 +10,9 @@ const port = 2579;
 const ioFunctions = require('./mqttio');
 const db = require('./db/connect');
 
+const Command = require('./db/models/command');
+const command = require('./db/models/command');
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(router);

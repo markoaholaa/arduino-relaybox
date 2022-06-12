@@ -7,11 +7,13 @@ const cancelButton = document.getElementById('cancelDangerous');
 
 const overlay = document.querySelector('.overlay');
 
+let address = '';
+
 buttons.forEach(btn => {
 	btn.addEventListener('click', () => {
 
 		const dangerous = btn.getAttribute('data-danger');
-		const address = btn.getAttribute('data-address');
+		address = btn.getAttribute('data-address');
 
 		if (dangerous === 'true') {
 
@@ -22,17 +24,6 @@ buttons.forEach(btn => {
 			dangerousControl.classList.add('danger-visible');
 			overlay.classList.add('overlay-active');
 
-			cancelButton.addEventListener('click', () => {
-				dangerousControl.classList.remove('danger-visible');
-				overlay.classList.remove('overlay-active');
-			});
-
-			confirmButton.addEventListener('click', () => {
-				dangerousControl.classList.remove('danger-visible');
-				overlay.classList.remove('overlay-active');
-				console.log('Sending: ', address); // For some reason it sends the previous address again.
-				return socket.emit('button press', address);
-			});
 		} else {
 			if (btn.classList.contains('icon-activated')) {
 				btn.classList.remove('icon-activated');
@@ -46,9 +37,24 @@ buttons.forEach(btn => {
 	});
 });
 
+confirmButton.addEventListener('click', () => {
+	const addr = address;
+
+	socket.emit('button press', addr);
+	dangerousControl.classList.remove('danger-visible');
+	overlay.classList.remove('overlay-active');
+});
+
+cancelButton.addEventListener('click', () => {
+	dangerousControl.classList.remove('danger-visible');
+	overlay.classList.remove('overlay-active');
+});
+
 // Listeners
 
 // I had to divide the updates into 2 groups.
+
+const dataReceivedIcon = document.getElementById('dataReceived');
 
 socket.on('first group', (data) => {
 
@@ -62,6 +68,11 @@ socket.on('first group', (data) => {
 			}
 		}
 	}
+
+	dataReceivedIcon.style.display = 'block';
+	setTimeout(() => {
+		dataReceivedIcon.style.display = 'none';
+	}, 100);
 
 });
 
@@ -78,4 +89,20 @@ socket.on('second group', (data) => {
 		}
 	}
 
+	dataReceivedIcon.style.display = 'block';
+	setTimeout(() => {
+		dataReceivedIcon.style.display = 'none';
+	}, 100);
+
+});
+
+const arduinoAlert = document.getElementById('arduinoDead');
+const noConnection = document.querySelector('.no-connection');
+
+socket.on('arduino dead', (msg) => {
+	if (msg) {
+		noConnection.style.display = 'block';
+	} else {
+		noConnection.style.display = 'none';
+	}
 });
